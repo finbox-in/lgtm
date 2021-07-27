@@ -13,12 +13,12 @@ def upload_df_s3(df, path):
     
     my_bucket = s3.Bucket(bucket_name)
     
+    flag = 0
+    print('Checking if file with same name is already present in S3.')
     for file in my_bucket.objects.all():
-        print('Checking if file with same name is already present in S3.\n')
         if file_name in file.key:
             print('File name \"{}\" already present. Please try with a different name'.format(file_name))
-            break
-        else:
-            print('Uploading the file to S3 at - {}'.format(path))
-            df.to_csv(path, index=0)
-            break
+            flag = 1
+    if flag == 0:
+        print('Uploading the file to S3 at - {}'.format(path))
+        df.to_csv(path, index=0)
